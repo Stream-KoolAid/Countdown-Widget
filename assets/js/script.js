@@ -1,3 +1,7 @@
+/*╔══════════════╗*/
+/*║  PARAMETERS  ║*/
+/*╚══════════════╝*/
+
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 
@@ -34,8 +38,12 @@ const fontWeight = urlParams.get('fontWeight') || '600';
 const textTransform = urlParams.get('textTransform') || 'uppercase';
 const color = urlParams.get('color') || '#fff';
 const textShadow =
-	urlParams.get('textShadow') || '2px 2px 2px rgba(0, 0, 0, 0.5)';
+	urlParams.get('textShadow') || '2px 2px 2px rgba(0, 0, 0, 1)';
 const letterSpacing = urlParams.get('letterSpacing') || '0px';
+
+/*╔═════════════════╗*/
+/*║  STYLE SETTING  ║*/
+/*╚═════════════════╝*/
 
 countdown.style.fontSize = fontSize;
 countdown.style.fontFamily = fontFamily;
