@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html data-bs-theme="dark">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Countdown Generator</title>
+
+		<script src="./assets/js/generate.js"></script>
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+		/>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+		<!-- Add Select2 CSS and JS -->
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
+			rel="stylesheet"
+		/>
+		<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+		<script>
+			$(document).ready(function () {
+				$('#fontSelect').select2();
+			});
+		</script> -->
+	</head>
+	<body>
+		<div class="container">
+			<h1>Countdown Generator</h1>
+			<div class="row">
+				<div class="col">
+					<label for="fontSize">Font Size:</label>
+					<input type="text" id="fontSize" class="form-control" />
+				</div>
+				<div class="col">
+					<label for="fontSelect">Font Family:</label>
+					<select id="fontSelect" class="form-control">
+						<option value="" disabled selected>Select a Google Font</option>
+						<!-- Add Google Fonts options here -->
+					</select>
+				</div>
+				<div class="col">
+					<label for="fontWeight">Font Weight:</label>
+					<select id="fontWeight" class="form-control">
+						<option value="normal">Normal</option>
+						<option value="bold">Bold</option>
+						<option value="bolder">Bolder</option>
+						<option value="lighter">Lighter</option>
+					</select>
+				</div>
+				<div class="col">
+					<label for="fontTransform">Font Transform:</label>
+					<select id="fontTransform" class="form-control">
+						<option value="none">None</option>
+						<option value="uppercase">Uppercase</option>
+						<option value="lowercase">Lowercase</option>
+						<option value="capitalize">Capitalize</option>
+					</select>
+				</div>
+				<div class="col">
+					<label for="color">Color:</label>
+					<input type="color" id="color" class="form-control" />
+				</div>
+				<div class="col">
+					<label for="textShadow">Text Shadow:</label>
+					<input
+						type="text"
+						id="textShadow"
+						class="form-control"
+						placeholder="e.g., 2px 2px 5px #000"
+					/>
+				</div>
+				<div class="col">
+					<label for="letterSpacing">Letter Spacing:</label>
+					<input
+						type="text"
+						id="letterSpacing"
+						class="form-control"
+						placeholder="e.g., 1px"
+					/>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
