@@ -7,7 +7,7 @@ on:
         type: string
         description: 'Release version to create (e.g., v1.2.3)'
         required: false
-
+      
 permissions:
   contents: write
 
@@ -22,32 +22,31 @@ jobs:
           fetch-depth: 0 # Fetch all history to get the latest tag
           ref: gh-pages
 
-      - name: Determine Release Version
-        id: determine-release-version
+      - name: Check commit message
+        id: check-commit
         run: |
-          if [[ -n "${{ github.event.inputs.release_version }}" ]]; then
-            RELEASE_VERSION="${{ github.event.inputs.release_version }}"
-          else
-            # Extract version from the latest commit message
-            if [[ "$(git log -1 --pretty=%B)" =~ ^release:[[:space:]]v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-              RELEASE_VERSION=$(git log -1 --pretty=%B | grep -oP '(?<=release: v)[0-9]+\.[0-9]+\.[0-9]+')
-            else
-              echo "No valid release version found in commit message or provided manually."
-              exit 1
-            fi
+          if [[ ! "$(git log -1 --pretty=%B)" =~ ^release:[[:space:]]v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "This is not a release commit. Skipping."
+            exit 1
           fi
-          echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
 
-      - name: Get Repository Name
+      - name: Get repository name
         id: repo-name
         run: |
           echo "REPO_NAME=$(basename $GITHUB_REPOSITORY)" >> $GITHUB_ENV
 
-      - name: Rename Widget Folder
+      - name: Get next release number
+        id: get-release-number
+        run: |
+          # Extract the version number from the commit message
+          RELEASE_VERSION=$(git log -1 --pretty=%B | grep -oP '(?<=release: v)[0-9]+\.[0-9]+\.[0-9]+')
+          echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
+
+      - name: Rename widget folder
         run: |
           mv widget $REPO_NAME
 
-      - name: Create Zip File
+      - name: Create zip file
         run: |
           ZIP_FILE_NAME="$REPO_NAME-v$RELEASE_VERSION.zip"
           zip -r $ZIP_FILE_NAME $REPO_NAME
