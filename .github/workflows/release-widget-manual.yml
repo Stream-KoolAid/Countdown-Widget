@@ -1,4 +1,4 @@
-name: Release Widget Manual
+name: Release Manual
 
 on:
   push:
