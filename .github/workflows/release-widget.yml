@@ -9,6 +9,7 @@ on:
   workflow_dispatch: # Enable manual trigger
     inputs:
       release_version:
+        type: string
         description: 'Release version to create (e.g., v1.2.3)'
         required: false
 
@@ -63,8 +64,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: "v${{ env.RELEASE_VERSION }}"
-          release_name: "${{ env.REPO_NAME }} v${{ env.RELEASE_VERSION }}"
+          tag_name: 'v${{ env.RELEASE_VERSION }}'
+          release_name: '${{ env.REPO_NAME }} v${{ env.RELEASE_VERSION }}'
           draft: false
           prerelease: false
 
