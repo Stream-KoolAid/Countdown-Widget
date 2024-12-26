@@ -1,13 +1,12 @@
 name: Release Widget
 
 on:
-  workflow_dispatch: # Enable manual trigger
-    inputs:
-      release_version:
-        type: string
-        description: 'Release version to create (e.g., v1.2.3)'
-        required: false
-      
+  push:
+    branches:
+      - gh-pages
+    paths:
+      - 'widget/**' # Trigger when files in the widget folder change
+
 permissions:
   contents: write
 
