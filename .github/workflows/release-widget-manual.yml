@@ -1,0 +1,68 @@
+name: Release Widget
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., 1.0.0)'
+        required: true
+        default: '1.0.0'
+
+permissions:
+  contents: write
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Fetch all history to get the latest tag
+          ref: gh-pages
+
+      - name: Validate version input
+        id: validate-version
+        run: |
+          if [[ ! "${{ github.event.inputs.version }}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Invalid version format. Expected format: X.Y.Z (e.g., 1.0.0)"
+            exit 1
+          fi
+        shell: bash
+
+      - name: Set environment variables
+        run: |
+          echo "RELEASE_VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+          echo "REPO_NAME=$(basename $GITHUB_REPOSITORY)" >> $GITHUB_ENV
+
+      - name: Rename widget folder
+        run: |
+          mv widget $REPO_NAME
+
+      - name: Create zip file
+        run: |
+          ZIP_FILE_NAME="$REPO_NAME-v$RELEASE_VERSION.zip"
+          zip -r $ZIP_FILE_NAME $REPO_NAME
+          echo "ZIP_FILE_NAME=$ZIP_FILE_NAME" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: 'v${{ env.RELEASE_VERSION }}'
+          release_name: '${{ env.REPO_NAME }} v${{ env.RELEASE_VERSION }}'
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.ZIP_FILE_NAME }}
+          asset_name: ${{ env.ZIP_FILE_NAME }}
+          asset_content_type: application/zip
