@@ -21,7 +21,7 @@ jobs:
       - name: Check commit message
         id: check-commit
         run: |
-          if [[ ! "$(git log -1 --pretty=%B)" =~ ^release:[[:space:]]v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          if [[ ! "$(git log -1 --pretty=%B)" =~ ^release:[[:space:]][0-9]+\\.[0-9]+\\.[0-9]+$ ]]; then
             echo "This is not a release commit. Skipping."
             exit 1
           fi
