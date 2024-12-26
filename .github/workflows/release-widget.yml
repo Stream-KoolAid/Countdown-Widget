@@ -1,11 +1,6 @@
 name: Release Widget
 
 on:
-  push:
-    branches:
-      - gh-pages
-    paths:
-      - 'widget/**' # Trigger when files in the widget folder change
   workflow_dispatch: # Enable manual trigger
     inputs:
       release_version:
