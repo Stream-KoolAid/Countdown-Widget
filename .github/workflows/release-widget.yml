@@ -6,6 +6,9 @@ on:
       - gh-pages
     paths:
       - 'widget/**' # Trigger when files in the widget folder change
+      
+permissions:
+  contents: write
 
 jobs:
   create-release:
