@@ -1,9 +1,10 @@
-name: Release Widget
+name: Release Widget Manual
 
 on:
   workflow_dispatch:
     inputs:
       version:
+        type: string
         description: 'Release version (e.g., 1.0.0)'
         required: true
         default: '1.0.0'
