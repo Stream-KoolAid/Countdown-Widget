@@ -5,7 +5,7 @@ on:
     # Inputs the workflow accepts.
     inputs:
       release_version:
-        description: 'Release version to create (e.g., v1.2.3)'
+        description: 'Release version (e.g., v1.2.3)'
         required: true
         type: string
 
