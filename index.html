@@ -3,186 +3,130 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" href="data:;base64,=" />
+		<meta
+			name="description"
+			content="Create customizable countdown widgets for your stream"
+		/>
+		<meta name="theme-color" content="#212529" />
 		<title>Countdown Widget Generator</title>
 		<link
-			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
 			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+			crossorigin="anonymous"
 		/>
 		<link
 			rel="stylesheet"
 			href="https://cdn.jsdelivr.net/gh/blushell/FontAwesome@6.7.2/css/all.min.css"
+			crossorigin="anonymous"
 		/>
-		<style>
-			.form-control,
-			.form-select {
-				background-color: #2b3035;
-			}
-
-			.btn-primary {
-				padding: 0.8rem;
-				font-weight: 500;
-			}
-
-			.preview-container {
-				position: sticky;
-				top: 20px;
-			}
-
-			.preview-frame {
-				width: 100%;
-				height: 250px;
-				border: none;
-				background: transparent;
-			}
-
-			/* Layout styles */
-			.settings-section {
-				background: rgba(255, 255, 255, 0.02);
-				border-radius: 8px;
-				padding: 2rem;
-				margin-bottom: 2rem;
-			}
-
-			.settings-title {
-				font-size: 1.25rem;
-				font-weight: 600;
-				margin-bottom: 1.5rem;
-				color: #fff;
-				display: flex;
-				align-items: center;
-				gap: 0.5rem;
-			}
-
-			.form-group {
-				margin-bottom: 1.5rem;
-			}
-
-			.form-label {
-				margin-bottom: 0.5rem;
-				font-weight: 500;
-				color: #adb5bd;
-			}
-
-			.time-inputs {
-				display: grid;
-				grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-				gap: 1rem;
-				margin-bottom: 1.5rem;
-			}
-
-			.time-input-group {
-				display: flex;
-				flex-direction: column;
-			}
-
-			.settings-toggle {
-				background: #343a40;
-				padding: 1rem 1.5rem;
-				border-radius: 8px;
-				margin-bottom: 2rem;
-			}
-
-			.form-switch {
-				padding-left: 3.5rem;
-			}
-
-			.form-switch .form-check-input {
-				width: 3em;
-				height: 1.5em;
-				margin-left: -3.5rem;
-			}
-
-			.form-switch .form-check-label {
-				font-weight: 500;
-				padding-top: 0.25rem;
-			}
-
-			.sub-settings {
-				margin-top: 1.5rem;
-			}
-
-			.result-url {
-				background: #2b3035;
-				border-radius: 6px;
-				padding: 1rem;
-				color: #adb5bd;
-				font-family: monospace;
-				margin: 1rem 0;
-				word-break: break-all;
-			}
-		</style>
+		<link rel="stylesheet" href="assets/css/style.css" />
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+			defer
+			crossorigin="anonymous"
+		></script>
+		<script src="assets/js/script.js" defer></script>
 	</head>
 	<body class="py-4">
-		<div class="container-fluid">
+		<main class="container-fluid">
 			<div class="row g-4">
 				<!-- GENERATOR OPTIONS -->
-				<div class="col-lg-7">
+				<div class="col-lg-5">
 					<div class="card shadow-sm">
 						<div class="card-body p-4">
-							<h2 class="card-title h3 mb-4">Countdown Widget Generator</h2>
+							<h1 class="card-title h3 mb-4">Countdown Widget Generator</h1>
 
-							<form id="widgetForm">
+							<form id="widgetForm" aria-label="Widget configuration form">
 								<!-- TIME SETTINGS -->
 								<div class="settings-section">
-									<h3 class="settings-title">
-										<i class="fa-solid fa-timer"></i>
+									<h2 class="settings-title">
+										<i class="fa-solid fa-timer" aria-hidden="true"></i>
 										Time Settings
-									</h3>
+									</h2>
 
 									<div class="time-inputs">
 										<div class="time-input-group">
-											<label class="form-label">Days</label>
+											<label class="form-label" for="days">Days</label>
 											<input
 												type="number"
+												id="days"
 												name="days"
 												placeholder="0"
 												min="-1"
 												class="form-control"
+												aria-describedby="daysHelp"
 											/>
+											<small id="daysHelp" class="form-text text-muted"
+												>Set to -1 to hide</small
+											>
 										</div>
 										<div class="time-input-group">
-											<label class="form-label">Hours</label>
+											<label class="form-label" for="hours">Hours</label>
 											<input
 												type="number"
-												placeholder="0"
+												id="hours"
 												name="hours"
+												placeholder="0"
 												min="-1"
 												max="23"
 												class="form-control"
+												aria-describedby="hoursHelp"
 											/>
+											<small id="hoursHelp" class="form-text text-muted"
+												>Set to -1 to hide</small
+											>
 										</div>
 										<div class="time-input-group">
-											<label class="form-label">Minutes</label>
+											<label class="form-label" for="minutes">Minutes</label>
 											<input
 												type="number"
-												placeholder="0"
+												id="minutes"
 												name="minutes"
+												placeholder="0"
 												min="-1"
 												max="59"
 												class="form-control"
+												aria-describedby="minutesHelp"
 											/>
+											<small id="minutesHelp" class="form-text text-muted"
+												>Set to -1 to hide</small
+											>
 										</div>
 										<div class="time-input-group">
-											<label class="form-label">Seconds</label>
+											<label class="form-label" for="seconds">Seconds</label>
 											<input
 												type="number"
+												id="seconds"
 												name="seconds"
 												placeholder="0"
 												min="-1"
 												max="59"
 												class="form-control"
+												aria-describedby="secondsHelp"
 											/>
+											<small id="secondsHelp" class="form-text text-muted"
+												>Set to -1 to hide</small
+											>
 										</div>
 									</div>
 
 									<div class="form-group">
-										<label class="form-label">Custom End Message</label>
+										<label class="form-label" for="message"
+											>Custom End Message</label
+										>
 										<input
 											type="text"
+											id="message"
 											name="message"
 											class="form-control"
 											placeholder="Countdown complete!"
+											aria-describedby="messageHelp"
 										/>
+										<small id="messageHelp" class="form-text text-muted d-block"
+											>Customize the message displayed when countdown
+											ends</small
+										>
 									</div>
 								</div>
 
@@ -192,68 +136,113 @@
 										<input
 											type="checkbox"
 											role="switch"
+											id="confetti"
 											name="confetti"
 											class="form-check-input"
+											aria-describedby="confettiHelp"
 										/>
-										<label class="form-check-label"
+										<label class="form-check-label" for="confetti"
 											>Enable Confetti Effects</label
+										>
+										<small
+											id="confettiHelp"
+											class="form-text text-muted d-block"
+											>Show confetti animation when countdown ends</small
 										>
 									</div>
 								</div>
 
-								<div id="confettiSettings">
+								<div id="confettiSettings" aria-expanded="false">
 									<div class="settings-section">
-										<h3 class="settings-title">
-											<!-- <i class="fa-solid fa-sparkles"></i> -->
+										<h2 class="settings-title">
+											<i class="fa-solid fa-sparkles" aria-hidden="true"></i>
 											Confetti Settings
-										</h3>
+										</h2>
 
 										<div class="row g-4">
 											<div class="col-md-6">
-												<label class="form-label">Particle Count</label>
+												<label class="form-label" for="particleCount"
+													>Particle Count</label
+												>
 												<input
 													type="number"
+													id="particleCount"
 													name="particleCount"
 													placeholder="100"
 													class="form-control"
+													aria-describedby="particleCountHelp"
 												/>
+												<small
+													id="particleCountHelp"
+													class="form-text text-muted d-block"
+													>Number of confetti particles</small
+												>
 											</div>
 											<div class="col-md-6">
-												<label class="form-label">Spread Angle</label>
+												<label class="form-label" for="angle"
+													>Spread Angle</label
+												>
 												<input
 													type="number"
+													id="angle"
 													name="angle"
 													placeholder="90"
 													min="0"
 													max="360"
 													class="form-control"
+													aria-describedby="angleHelp"
 												/>
+												<small
+													id="angleHelp"
+													class="form-text text-muted d-block"
+													>Spread angle of confetti particles</small
+												>
 											</div>
 											<div class="col-md-6">
-												<label class="form-label">Spread Distance</label>
+												<label class="form-label" for="spread"
+													>Spread Distance</label
+												>
 												<input
 													type="number"
+													id="spread"
 													name="spread"
 													placeholder="45"
 													class="form-control"
+													aria-describedby="spreadHelp"
 												/>
+												<small
+													id="spreadHelp"
+													class="form-text text-muted d-block"
+													>Spread distance of confetti particles</small
+												>
 											</div>
 											<div class="col-md-6">
-												<label class="form-label">Start Height (Y)</label>
+												<label class="form-label" for="originY"
+													>Start Height (Y)</label
+												>
 												<input
 													type="number"
+													id="originY"
 													name="originY"
 													placeholder="0.6"
 													step="0.1"
 													class="form-control"
+													aria-describedby="originYHelp"
 												/>
+												<small
+													id="originYHelp"
+													class="form-text text-muted d-block"
+													>Start height of confetti particles</small
+												>
 											</div>
 										</div>
 
 										<div class="form-group mt-4">
-											<label class="form-label">Confetti Style</label>
+											<label class="form-label" for="flat"
+												>Confetti Style</label
+											>
 											<select class="form-select" name="flat" id="flat">
-												<option value="false">3D Confetti</option>
+												<option value="false" selected>3D Confetti</option>
 												<option value="true">Flat Confetti</option>
 											</select>
 										</div>
@@ -263,33 +252,53 @@
 											<div class="form-switch mb-4">
 												<input
 													type="checkbox"
+													id="useEmoji"
 													name="useEmoji"
 													class="form-check-input"
+													aria-describedby="emojiHelp"
 												/>
-												<label class="form-check-label"
+												<label class="form-check-label" for="useEmoji"
 													>Use Emoji Confetti</label
+												>
+												<small
+													id="emojiHelp"
+													class="form-text text-muted d-block"
+													>Replace confetti particles with emoji</small
 												>
 											</div>
 
 											<div class="row g-4">
 												<div class="col-md-6">
-													<label class="form-label">Emoji Character</label>
+													<label class="form-label" for="emoji"
+														>Emoji Character</label
+													>
 													<input
 														type="text"
+														id="emoji"
 														name="emoji"
 														placeholder="🦄"
 														class="form-control"
+														aria-describedby="emojiHelp"
 													/>
 												</div>
 												<div class="col-md-6">
-													<label class="form-label">Emoji Size Scale</label>
+													<label class="form-label" for="scalar"
+														>Emoji Size Scale</label
+													>
 													<input
 														type="number"
+														id="scalar"
 														name="scalar"
 														placeholder="2"
 														step="0.1"
 														class="form-control"
+														aria-describedby="scalarHelp"
 													/>
+													<small
+														id="scalarHelp"
+														class="form-text text-muted d-block"
+														>Scale of emoji confetti particles</small
+													>
 												</div>
 											</div>
 										</div>
@@ -302,51 +311,76 @@
 										<input
 											type="checkbox"
 											role="switch"
+											id="customStyling"
 											name="customStyling"
 											class="form-check-input"
+											aria-describedby="stylingHelp"
 										/>
-										<label class="form-check-label"
+										<label class="form-check-label" for="customStyling"
 											>Enable Custom Styling</label
+										>
+										<small id="stylingHelp" class="form-text text-muted d-block"
+											>Customize the widget appearance</small
 										>
 									</div>
 								</div>
 
-								<div id="stylingSettings">
+								<div id="stylingSettings" aria-expanded="false">
 									<div class="settings-section">
-										<h3 class="settings-title">
-											<i class="fa-solid fa-font-case"></i>
+										<h2 class="settings-title">
+											<i
+												class="fa-duotone fa-solid fa-font-case"
+												aria-hidden="true"
+											></i>
 											Font Settings
-										</h3>
+										</h2>
 										<div class="row g-4">
 											<div class="col-md-12">
-												<label class="form-label">Font Family</label>
+												<label class="form-label" for="fontFamily"
+													>Font Family</label
+												>
 												<select
 													name="fontFamily"
 													id="fontFamily"
 													class="form-select"
+													aria-describedby="fontHelp"
 												>
 													<option value="" disabled selected>
 														Select a Google Font
 													</option>
 												</select>
+												<small id="fontHelp" class="form-text text-muted"
+													>Choose from Google Fonts library</small
+												>
 											</div>
 											<div class="col-md-6">
-												<label class="form-label">Font Size</label>
+												<label class="form-label" for="fontSize"
+													>Font Size</label
+												>
 												<input
 													type="text"
+													id="fontSize"
 													name="fontSize"
 													placeholder="40px"
 													class="form-control"
+													aria-describedby="fontSizeHelp"
 												/>
+												<small
+													id="fontSizeHelp"
+													class="form-text text-muted d-block"
+													>Font size of the widget</small
+												>
 											</div>
 											<div class="col-md-6">
-												<label class="form-label">Font Weight</label>
+												<label class="form-label" for="fontWeight"
+													>Font Weight</label
+												>
 												<select
 													name="fontWeight"
-													class="form-select"
 													id="fontWeight"
+													class="form-select"
 												>
-													<option disabled selected>Select Weight</option>
+													<option selected>Select Weight</option>
 													<option value="100">Thin (100)</option>
 													<option value="300">Light (300)</option>
 													<option value="400">Regular (400)</option>
@@ -359,31 +393,49 @@
 									</div>
 
 									<div class="settings-section">
-										<h3 class="settings-title">
-											<i class="fa-regular fa-fill-drip"></i>
+										<h2 class="settings-title">
+											<i class="fa-regular fa-fill-drip" aria-hidden="true"></i>
 											Text Styling
-										</h3>
+										</h2>
 										<div class="row g-4">
 											<div class="col-md-6">
-												<label class="form-label">Text Color</label>
+												<label class="form-label" for="color">Text Color</label>
 												<input
 													type="color"
+													id="color"
 													name="color"
 													value="#ffffff"
 													class="form-control form-control-color w-100"
+													aria-describedby="colorHelp"
 												/>
+												<small
+													id="colorHelp"
+													class="form-text text-muted d-block"
+													>Text color of the widget</small
+												>
 											</div>
 											<div class="col-md-6">
-												<label class="form-label">Letter Spacing</label>
+												<label class="form-label" for="letterSpacing"
+													>Letter Spacing</label
+												>
 												<input
 													type="text"
+													id="letterSpacing"
 													name="letterSpacing"
 													placeholder="0px"
 													class="form-control"
+													aria-describedby="letterSpacingHelp"
 												/>
+												<small
+													id="letterSpacingHelp"
+													class="form-text text-muted d-block"
+													>Letter spacing of the widget</small
+												>
 											</div>
 											<div class="col-md-6">
-												<label class="form-label">Text Transform</label>
+												<label class="form-label" for="textTransform"
+													>Text Transform</label
+												>
 												<select
 													class="form-select"
 													name="textTransform"
@@ -396,61 +448,79 @@
 												</select>
 											</div>
 											<div class="col-md-6">
-												<label class="form-label">Text Shadow</label>
+												<label class="form-label" for="textShadow"
+													>Text Shadow</label
+												>
 												<input
 													type="text"
+													id="textShadow"
 													name="textShadow"
 													class="form-control"
 													placeholder="2px 2px 2px rgba(0,0,0,0.5)"
+													aria-describedby="textShadowHelp"
 												/>
+												<small
+													id="textShadowHelp"
+													class="form-text text-muted d-block"
+													>Text shadow of the widget</small
+												>
 											</div>
 										</div>
 									</div>
 								</div>
-
-								<button type="submit" class="btn btn-primary w-100 btn-lg">
-									Generate Widget URL
-								</button>
 							</form>
 						</div>
 					</div>
 				</div>
 
 				<!-- PREVIEW/RESULT SECTION -->
-				<div class="col-lg-5">
+				<div class="col-lg-7">
 					<div class="preview-container">
 						<div class="card shadow-sm mb-4">
 							<div class="preview-section card-body rounded">
-								<h3 class="card-title h4 mb-4">Live Preview</h3>
+								<h2 class="card-title h4 mb-4">Live Preview</h2>
 								<iframe
 									id="previewFrame"
 									class="preview-frame"
 									sandbox="allow-scripts allow-same-origin"
+									title="Widget Preview"
 								></iframe>
 							</div>
 						</div>
 
 						<div class="result-section card shadow-sm" style="display: none">
 							<div class="card-body">
-								<h3 class="card-title h4 mb-4">Widget Details</h3>
+								<h2 class="card-title h4 mb-4">Widget Details</h2>
 
 								<div class="mb-4">
-									<h4 class="h6 text-muted mb-3">Widget URL</h4>
-									<div class="result-url" id="generatedUrl"></div>
+									<h3 class="h6 text-muted mb-3">Widget URL</h3>
+									<div
+										class="result-url"
+										id="generatedUrl"
+										role="textbox"
+										aria-label="Generated widget URL"
+									></div>
 									<button
 										onclick="copyToClipboard('generatedUrl')"
 										class="btn btn-primary w-100"
+										aria-label="Copy widget URL"
 									>
 										Copy URL
 									</button>
 								</div>
 
 								<div>
-									<h4 class="h6 text-muted mb-3">Widget CSS</h4>
-									<div class="result-url" id="generatedCSS"></div>
+									<h3 class="h6 text-muted mb-3">Widget CSS</h3>
+									<div
+										class="result-url"
+										id="generatedCSS"
+										role="textbox"
+										aria-label="Generated widget CSS"
+									></div>
 									<button
 										onclick="copyToClipboard('generatedCSS')"
 										class="btn btn-primary w-100"
+										aria-label="Copy widget CSS"
 									>
 										Copy CSS
 									</button>
@@ -460,216 +530,6 @@
 					</div>
 				</div>
 			</div>
-		</div>
-
-		<!-- SCRIPT START -->
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-		<script>
-			async function loadFonts() {
-				try {
-					const response = await fetch(
-						'https://gist.githubusercontent.com/blushell/cf1e432b65f5c3a3eb1e30508fb584a4/raw/59f99da9d53aac79da742ebca7aab7121dca66cf/fonts.json'
-					);
-					const data = await response.json();
-
-					const fontFamily = document.getElementById('fontFamily');
-
-					data.fonts.forEach((fontName) => {
-						const option = document.createElement('option');
-						option.value = fontName;
-						option.textContent = fontName;
-						fontFamily.appendChild(option);
-					});
-				} catch (error) {
-					console.error('Error loading fonts:', error);
-				}
-			}
-
-			function initializeSettingsVisibility() {
-				// Helper function to toggle visibility
-				const toggleVisibility = (checkbox, section) => {
-					section.style.display = checkbox.checked ? 'block' : 'none';
-				};
-
-				// Map checkboxes to their corresponding settings sections
-				const settingsMap = [
-					{ checkbox: 'confetti', section: 'confettiSettings' },
-					{ checkbox: 'customStyling', section: 'stylingSettings' },
-				];
-
-				// Initialize visibility and add event listeners
-				settingsMap.forEach(({ checkbox, section }) => {
-					const checkboxElement = document.querySelector(
-						`input[name="${checkbox}"]`
-					);
-					const sectionElement = document.getElementById(section);
-
-					// Initial visibility
-					toggleVisibility(checkboxElement, sectionElement);
-
-					// Add event listener
-					checkboxElement.addEventListener('change', () => {
-						toggleVisibility(checkboxElement, sectionElement);
-					});
-				});
-			}
-
-			document.addEventListener('DOMContentLoaded', () => {
-				loadFonts();
-				initializeSettingsVisibility();
-
-				// Initialize form handling
-				const form = document.getElementById('widgetForm');
-
-				// Function to generate CSS string from styling options
-				function generateCSS() {
-					if (!form.elements['customStyling'].checked) return '';
-
-					const css = `:root {
-  --font-size: ${form.elements['fontSize'].value || '40px'};
-  --font-family: ${form.elements['fontFamily'].value || 'system-ui'};
-  --font-weight: ${form.elements['fontWeight'].value || '400'};
-  --text-color: ${form.elements['color'].value || '#ffffff'};
-  --letter-spacing: ${form.elements['letterSpacing'].value || '0px'};
-  --text-transform: ${form.elements['textTransform'].value || 'none'};
-  --text-shadow: ${form.elements['textShadow'].value || 'none'};
-}`;
-					return css;
-				}
-
-				// Function to update preview and generate URL/CSS
-				function updateWidgetDisplay() {
-					console.log('Updating widget display...');
-					const formData = new FormData(form);
-					const params = new URLSearchParams();
-
-					// Add time parameters
-					['days', 'hours', 'minutes', 'seconds'].forEach((param) => {
-						const value = form.elements[param]?.value;
-						console.log(`${param}: ${value}`);
-						if (value) {
-							if (value === '-1') {
-								params.append(
-									`show${param.charAt(0).toUpperCase() + param.slice(1)}`,
-									'false'
-								);
-							} else {
-								params.append(param, value);
-							}
-						}
-					});
-
-					// Add message if provided
-					const message = form.elements['message']?.value;
-					console.log(`message: ${message}`);
-					if (message) params.append('message', message);
-
-					// Add confetti parameters if enabled
-					if (form.elements['confetti']?.checked) {
-						console.log('Confetti enabled');
-						params.append('confetti', 'true');
-						params.append(
-							'particleCount',
-							form.elements['particleCount']?.value || '100'
-						);
-						params.append('angle', form.elements['angle']?.value || '90');
-						params.append('spread', form.elements['spread']?.value || '45');
-						params.append('originY', form.elements['originY']?.value || '0.6');
-						params.append('flat', form.elements['flat']?.value || 'false');
-
-						if (form.elements['useEmoji']?.checked) {
-							console.log('Emoji enabled');
-							params.append('useEmoji', 'true');
-							params.append('emoji', form.elements['emoji']?.value || '🦄');
-							params.append('scalar', form.elements['scalar']?.value || '2');
-						}
-					}
-
-					// Generate the final URL
-					const baseUrl = new URL(
-						'widget/countdown.html',
-						window.location.origin + window.location.pathname
-					).href;
-					const finalUrl = `${baseUrl}?${params.toString()}`;
-					console.log('Final URL:', finalUrl);
-
-					// Update preview iframe
-					const previewFrame = document.getElementById('previewFrame');
-					previewFrame.src = finalUrl;
-
-					// Function to inject CSS into the iframe
-					const injectCSS = () => {
-						if (!form.elements['customStyling']?.checked) return;
-
-						const iframeDocument =
-							previewFrame.contentDocument ||
-							previewFrame.contentWindow.document;
-						let styleElement = iframeDocument.querySelector('#injectedStyles');
-
-						if (!styleElement) {
-							styleElement = iframeDocument.createElement('style');
-							styleElement.id = 'injectedStyles';
-							iframeDocument.head.appendChild(styleElement);
-						}
-
-						const css = `:root {
-							--font-size: ${form.elements['fontSize']?.value || '40px'};
-							--font-family: ${form.elements['fontFamily']?.value || 'system-ui'};
-							--font-weight: ${form.elements['fontWeight']?.value || '400'};
-							--text-color: ${form.elements['color']?.value || '#ffffff'};
-							--letter-spacing: ${form.elements['letterSpacing']?.value || '0px'};
-							--text-transform: ${form.elements['textTransform']?.value || 'none'};
-							--text-shadow: ${form.elements['textShadow']?.value || 'none'};
-						}`;
-
-						styleElement.textContent = css;
-					};
-
-					// Add load event listener to iframe
-					previewFrame.addEventListener('load', injectCSS);
-
-					// Update URL display
-					document.getElementById('generatedUrl').textContent = finalUrl;
-
-					// Update CSS display
-					const css = generateCSS();
-					console.log('Generated CSS:', css);
-					document.getElementById('generatedCSS').textContent = css;
-
-					// Show results section
-					document.querySelector('.result-section').style.display = 'block';
-				}
-
-				// Add input event listeners to all form elements for live preview
-				form.querySelectorAll('input, select').forEach((element) => {
-					element.addEventListener('input', updateWidgetDisplay);
-					element.addEventListener('change', updateWidgetDisplay);
-				});
-
-				// Handle form submission
-				form.addEventListener('submit', (e) => {
-					console.log('Form submitted');
-					e.preventDefault();
-					updateWidgetDisplay();
-				});
-
-				// Copy to clipboard function
-				window.copyToClipboard = function (elementId) {
-					const element = document.getElementById(elementId);
-					const text = element.textContent;
-					navigator.clipboard.writeText(text).then(() => {
-						const button = element.nextElementSibling;
-						const originalText = button.textContent;
-						button.textContent = 'Copied!';
-						setTimeout(() => {
-							button.textContent = originalText;
-						}, 2000);
-					});
-				};
-
-				// Initial preview
-				updateWidgetDisplay();
-			});
-		</script>
+		</main>
 	</body>
 </html>

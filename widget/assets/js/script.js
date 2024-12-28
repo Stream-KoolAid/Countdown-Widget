@@ -2,109 +2,201 @@
 /*║  PARAMETERS  ║*/
 /*╚══════════════╝*/
 
-const queryString = window.location.search;
-const urlParams = new URLSearchParams(queryString);
+// Constants and Configuration
+const CONFIG = {
+	DEFAULTS: {
+		particleCount: 100,
+		angle: 90,
+		spread: 45,
+		originY: 0.6,
+		message: '00:00:00:00',
+		emojiScalar: 2,
+		emoji: '🦄',
+	},
+	FONT: {
+		LOAD_REFERENCE_SIZE: '16px', // Reference size for font loading API - doesn't affect display
+	},
+};
+
+// DOM Elements
 const countdown = document.getElementById('countdownLabel');
+if (!countdown) throw new Error('Countdown element not found');
 
-const showUnits = {
-	days: urlParams.get('showDays') !== 'false',
-	hours: urlParams.get('showHours') !== 'false',
-	minutes: urlParams.get('showMinutes') !== 'false',
-	seconds: urlParams.get('showSeconds') !== 'false',
+// URL Parameters Handler
+class URLParamsHandler {
+	constructor() {
+		this.params = new URLSearchParams(window.location.search);
+	}
+
+	getBoolean(key, defaultValue = false) {
+		return this.params.has(key)
+			? this.params.get(key) === 'true'
+			: defaultValue;
+	}
+
+	getNumber(key, defaultValue) {
+		return parseInt(this.params.get(key), 10) || defaultValue;
+	}
+
+	getString(key, defaultValue) {
+		return this.params.get(key) || defaultValue;
+	}
+}
+
+const params = new URLParamsHandler();
+
+// Settings
+const settings = {
+	fontFamily: params.getString('fontFamily', null),
+	showUnits: {
+		days: params.getBoolean('showDays', true),
+		hours: params.getBoolean('showHours', true),
+		minutes: params.getBoolean('showMinutes', true),
+		seconds: params.getBoolean('showSeconds', true),
+	},
+	timeValues: {
+		days: params.getNumber('days', 0),
+		hours: params.getNumber('hours', 0),
+		minutes: params.getNumber('minutes', 0),
+		seconds: params.getNumber('seconds', 0),
+	},
+	customMessage: params.getString('message', CONFIG.DEFAULTS.message),
+	useConfetti: params.getBoolean('confetti', false),
+	confettiOptions: {
+		particleCount: params.getNumber(
+			'particleCount',
+			CONFIG.DEFAULTS.particleCount
+		),
+		angle: params.getNumber('angle', CONFIG.DEFAULTS.angle),
+		spread: params.getNumber('spread', CONFIG.DEFAULTS.spread),
+		origin: {
+			y: parseFloat(params.getString('originY', CONFIG.DEFAULTS.originY)),
+		},
+		flat: params.getBoolean('flat', false),
+	},
+	useCustomEmoji: params.getBoolean('useEmoji', false),
+	customEmoji: params.getString('emoji', CONFIG.DEFAULTS.emoji),
+	emojiScalar: parseFloat(
+		params.getString('scalar', CONFIG.DEFAULTS.emojiScalar)
+	),
 };
 
-const timeValues = {
-	days: parseInt(urlParams.get('days'), 10) || 0,
-	hours: parseInt(urlParams.get('hours'), 10) || 0,
-	minutes: parseInt(urlParams.get('minutes'), 10) || 0,
-	seconds: parseInt(urlParams.get('seconds'), 10) || 0,
-};
+// Font Loader
+class FontLoader {
+	static async load(fontFamily) {
+		if (!fontFamily) return;
 
-const customMessage = urlParams.get('message') || '00:00:00:00';
-const useConfetti = urlParams.has('confetti')
-	? urlParams.get('confetti') === 'true'
-	: true;
+		const fontFamilyValue = `"${fontFamily}", serif`;
+		document.documentElement.style.setProperty(
+			'--font-family',
+			fontFamilyValue
+		);
 
-const confettiOptions = {
-	particleCount: parseInt(urlParams.get('particleCount'), 10) || 100,
-	angle: parseInt(urlParams.get('angle'), 10) || 90,
-	spread: parseInt(urlParams.get('spread'), 10) || 45,
-	origin: { y: parseFloat(urlParams.get('originY')) || 0.6 },
-	flat: urlParams.get('flat') === 'true',
-};
-
-const useCustomEmoji = urlParams.has('useEmoji')
-	? urlParams.get('useEmoji') === 'true'
-	: false;
-const customEmoji = urlParams.get('emoji') || '🦄';
-const emojiShape = confetti.shapeFromText({
-	text: customEmoji,
-	customScalar: parseFloat(urlParams.get('scalar')) || 2,
-});
-
-/*╔═════════════════╗*/
-/*║  STYLE SETTINGS ║*/
-/*╚═════════════════╝*/
-
-// Load custom font
-(function loadFont() {
-	const rootStyles = getComputedStyle(document.documentElement);
-	const fontFamily = rootStyles.getPropertyValue('font-family').trim();
-	const fontName = fontFamily.replace(/['"]/g, '').split(',')[0].trim();
-
-	if (fontName && fontName.toLowerCase() !== 'system-ui') {
 		const link = document.createElement('link');
 		link.href = `https://fonts.googleapis.com/css?family=${encodeURIComponent(
-			fontName
+			fontFamily
 		)}:100,300,400,500,700,900`;
 		link.rel = 'stylesheet';
 		document.head.appendChild(link);
-	}
-})();
 
-/*╔═══════════════════╗*/
-/*║  COUNTDOWN LOGIC  ║*/
-/*╚═══════════════════╝*/
-
-function startCountdown() {
-	let totalTime =
-		timeValues.days * 86400 +
-		timeValues.hours * 3600 +
-		timeValues.minutes * 60 +
-		timeValues.seconds;
-
-	const countdownInterval = setInterval(() => {
-		if (totalTime <= 0) {
-			clearInterval(countdownInterval);
-			countdown.innerText = customMessage;
-
-			if (useConfetti) {
-				confetti({
-					...confettiOptions,
-					shapes: useCustomEmoji ? [emojiShape] : undefined,
-				});
-			}
-			return;
+		// Wait for font to load using a reference size (doesn't affect display)
+		try {
+			await document.fonts.load(
+				`${CONFIG.FONT.LOAD_REFERENCE_SIZE} ${fontFamily}`
+			);
+		} catch (error) {
+			console.warn(`Failed to load font: ${fontFamily}`, error);
 		}
+	}
+}
 
-		totalTime--;
+// Countdown Manager
+class CountdownManager {
+	constructor(settings) {
+		this.settings = settings;
+		this.totalTime = this.calculateTotalTime();
+		this.emojiShape = settings.useCustomEmoji
+			? confetti.shapeFromText({
+					text: settings.customEmoji,
+					scalar: settings.emojiScalar,
+			  })
+			: null;
+	}
+
+	calculateTotalTime() {
+		const { days, hours, minutes, seconds } = this.settings.timeValues;
+		return days * 86400 + hours * 3600 + minutes * 60 + seconds;
+	}
+
+	formatTime(totalSeconds) {
+		const days = Math.floor(totalSeconds / 86400);
+		const hours = Math.floor((totalSeconds % 86400) / 3600);
+		const minutes = Math.floor((totalSeconds % 3600) / 60);
+		const seconds = totalSeconds % 60;
 
 		const display = {
-			days: String(Math.floor(totalTime / 86400)).padStart(2, '0'),
-			hours: String(Math.floor((totalTime % 86400) / 3600)).padStart(2, '0'),
-			minutes: String(Math.floor((totalTime % 3600) / 60)).padStart(2, '0'),
-			seconds: String(totalTime % 60).padStart(2, '0'),
+			days: String(days).padStart(2, '0'),
+			hours: String(hours).padStart(2, '0'),
+			minutes: String(minutes).padStart(2, '0'),
+			seconds: String(seconds).padStart(2, '0'),
 		};
 
 		const visibleUnits = [
-			showUnits.days && display.days,
-			showUnits.hours && display.hours,
-			showUnits.minutes && display.minutes,
-			showUnits.seconds && display.seconds,
+			this.settings.showUnits.days && display.days,
+			this.settings.showUnits.hours && display.hours,
+			this.settings.showUnits.minutes && display.minutes,
+			this.settings.showUnits.seconds && display.seconds,
 		].filter(Boolean);
 
-		countdown.innerText = visibleUnits.join(':');
-	}, 1000);
+		return visibleUnits.join(':');
+	}
+
+	triggerConfetti() {
+		if (!this.settings.useConfetti) return;
+
+		confetti({
+			...this.settings.confettiOptions,
+			shapes: this.settings.useCustomEmoji ? [this.emojiShape] : undefined,
+			scalar: this.settings.useCustomEmoji
+				? this.settings.emojiScalar
+				: undefined,
+		});
+	}
+
+	start() {
+		const updateDisplay = () => {
+			if (this.totalTime <= 0) {
+				countdown.innerText = this.settings.customMessage;
+				this.triggerConfetti();
+				return false;
+			}
+
+			countdown.innerText = this.formatTime(this.totalTime);
+			this.totalTime--;
+			return true;
+		};
+
+		// Initial update
+		if (updateDisplay()) {
+			const interval = setInterval(() => {
+				if (!updateDisplay()) {
+					clearInterval(interval);
+				}
+			}, 1000);
+		}
+	}
 }
 
-startCountdown();
+// Initialize
+async function init() {
+	try {
+		await FontLoader.load(settings.fontFamily);
+		const countdownManager = new CountdownManager(settings);
+		countdownManager.start();
+	} catch (error) {
+		console.error('Failed to initialize countdown:', error);
+		countdown.innerText = 'Error loading countdown';
+	}
+}
+
+init();

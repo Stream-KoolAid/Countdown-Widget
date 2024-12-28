@@ -1,16 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="description" content="Customizable countdown timer widget" />
 		<title>Countdown Widget</title>
 		<link rel="stylesheet" href="./assets/css/style.css" />
+		<script
+			src="https://cdn.jsdelivr.net/npm/canvas-confetti/dist/confetti.browser.min.js"
+			defer
+		></script>
 		<script src="./assets/js/script.js" defer></script>
 	</head>
 	<body>
-		<div class="widget-container">
-			<div id="countdownLabel"></div>
-		</div>
-		<script src="https://cdn.jsdelivr.net/npm/canvas-confetti/dist/confetti.browser.min.js"></script>
+		<main class="widget-container">
+			<div id="countdownLabel" role="timer" aria-live="polite"></div>
+		</main>
 	</body>
 </html>
