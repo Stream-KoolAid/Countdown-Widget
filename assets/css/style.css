@@ -95,20 +95,18 @@
 
 /* Time Inputs Grid */
 .time-inputs {
-	display: grid;
-	grid-template-columns: repeat(4, 1fr);
+	display: flex;
+	flex-wrap: nowrap; /* Prevent wrapping */
 	gap: var(--spacing-sm);
 	margin-bottom: var(--spacing-md);
-	min-width: 100%;
-	grid-auto-flow: row;
-	grid-auto-rows: auto;
+	width: 100%;
 }
 
 .time-input-group {
+	flex: 1;
+	min-width: 0; /* Allow shrinking below content size */
 	display: flex;
 	flex-direction: column;
-	min-width: 0;
-	width: 100%;
 }
 
 /* Settings Toggle */
@@ -169,7 +167,11 @@
 	}
 
 	.time-inputs {
-		grid-template-columns: repeat(2, 1fr);
+		flex-wrap: wrap;
+	}
+
+	.time-input-group {
+		flex: 0 0 calc(50% - var(--spacing-sm)); /* Two columns on mobile */
 	}
 }
 
