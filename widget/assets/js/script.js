@@ -9,7 +9,6 @@ const CONFIG = {
 		angle: 90,
 		spread: 45,
 		originY: 0.6,
-		message: '00:00:00:00',
 		emojiScalar: 2,
 		emoji: '🦄',
 	},
@@ -121,6 +120,7 @@ class CountdownManager {
 					scalar: settings.emojiScalar,
 			  })
 			: null;
+		this.defaultMessage = this.generateDefaultMessage();
 	}
 
 	calculateTotalTime() {
@@ -163,10 +163,22 @@ class CountdownManager {
 		});
 	}
 
+	generateDefaultMessage() {
+		const units = [];
+		if (this.settings.showUnits.days) units.push('00');
+		if (this.settings.showUnits.hours) units.push('00');
+		if (this.settings.showUnits.minutes) units.push('00');
+		if (this.settings.showUnits.seconds) units.push('00');
+		return units.join(':');
+	}
+
 	start() {
 		const updateDisplay = () => {
 			if (this.totalTime <= 0) {
-				countdown.innerText = this.settings.customMessage;
+				countdown.innerText =
+					this.settings.customMessage === CONFIG.DEFAULTS.message
+						? this.defaultMessage
+						: this.settings.customMessage;
 				this.triggerConfetti();
 				return false;
 			}
