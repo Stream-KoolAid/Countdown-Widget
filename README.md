@@ -15,7 +15,7 @@ Easily add a customizable countdown timer to your OBS streams! This widget helps
 ## Quick Setup ⚙️
 
 1. **Download or Use Hosted Version**:
-   - Download the `[Countdown Widget](https://github.com/Stream-KoolAid/Countdown-Widget/releases)` file from this repository and host it on your server or use it locally in OBS.
+   - Download the [`Countdown Widget`](https://github.com/Stream-KoolAid/Countdown-Widget/releases) file from this repository and host it on your server or use it locally in OBS.
    - Alternatively, use the hosted version at: [Countdown Widget Hosted Version](https://stream-koolaid.github.io/Countdown-Widget/widget/countdown.html?).
 2. **Add to OBS**:
    - Open OBS. 📺
