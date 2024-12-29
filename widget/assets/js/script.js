@@ -94,7 +94,7 @@ class FontLoader {
 		const link = document.createElement('link');
 		link.href = `https://fonts.googleapis.com/css?family=${encodeURIComponent(
 			fontFamily
-		)}:100,300,400,500,700,900`;
+		)}:wght@100;300;400;500;700;900`;
 		link.rel = 'stylesheet';
 		document.head.appendChild(link);
 
